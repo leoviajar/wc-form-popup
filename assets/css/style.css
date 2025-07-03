@@ -1,0 +1,221 @@
+#ppp-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                      radial-gradient(circle at 80% 60%, rgba(255, 255, 255, 0.1) 0%, transparent 25%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#ppp-popup-overlay.ppp-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Popup Container estilizado */
+#ppp-popup-container {
+    background-color: #fff;
+    border-radius: 12px;
+    position: relative;
+    max-width: 440px;
+    width: 90%;
+    overflow: hidden;
+    max-height: 90vh;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background-image: linear-gradient(135deg, #ffffff, #f9f9f9, #fcf7fa);
+    box-shadow: 0 5px 20px rgba(219, 169, 188, 0.35), 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+/* Close Button estilizado */
+#ppp-close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    font-weight: normal;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
+    transition: color 0.3s ease;
+}
+
+#ppp-close-button:hover {
+    color: #5cb8b2;
+}
+
+/* Popup Content Area */
+#ppp-popup-content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+/* Image Section */
+.ppp-popup-image {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0 5px;
+}
+
+.ppp-popup-image img {
+    margin: 0 auto;
+    max-width: 60%;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
+}
+
+/* Form/Text Section */
+.ppp-popup-form-section {
+    flex: 1;
+    padding: 15px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Step 1 Specific Styles */
+.ppp-step1 h2 {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+}
+
+.ppp-step1 p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 25px;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.ppp-step1 .ppp-form-field {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.ppp-step1 input[type="text"],
+.ppp-step1 input[type="email"] {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    box-sizing: border-box;
+    font-size: 15px;
+    height: 45px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-family: inherit;
+}
+
+.ppp-step1 input[type="text"]:focus,
+.ppp-step1 input[type="email"]:focus {
+    border-color: #5cb8b2;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(92, 184, 178, 0.15);
+}
+
+.ppp-step1 button#ppp-submit-button {
+    background: linear-gradient(to right, #5cb8b2, #78c2bd);
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    height: 45px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(92, 184, 178, 0.3);
+    font-family: inherit;
+}
+
+.ppp-step1 button#ppp-submit-button:hover {
+    background: linear-gradient(to right, #4caaa1, #6ab8b2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(92, 184, 178, 0.4);
+}
+
+.ppp-step1 .ppp-error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+    font-family: inherit;
+}
+
+.ppp-step2 .ppp-coupon-code {
+    background-color: #f0f0f0;
+    border: 2px dashed #ccc;
+    padding: 15px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    display: inline-block;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.ppp-step2 p {
+    font-size: 15px;
+}
+
+#ppp-copy-button {
+    background: transparent;
+    border: none;
+    padding: 6px;
+}
+
+svg#copy-icon {
+    transition: transform 0.2s ease;
+}
+
+svg#copy-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Media query para dispositivos móveis */
+@media only screen and (max-width: 768px) {
+    
+    .ppp-popup-image img {
+        max-width: 60%;
+    }
+
+}
+
+@media only screen and (min-width: 400px) and (max-width: 460px) {
+    
+    .ppp-step1 h2 {
+        font-size: 17px;
+    }
+
+}
+
+@media only screen and (min-width: 349px) and (max-width: 399px) {
+    
+    .ppp-step1 h2 {
+        font-size: 16px;
+    }
+
+}

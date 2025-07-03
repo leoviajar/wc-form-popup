@@ -1,0 +1,38 @@
+/**
+ * Estilos para a página administrativa de leads
+ */
+
+/* Ajustes gerais da tabela */
+.wp-list-table .column-name {
+    width: 25%;
+}
+
+.wp-list-table .column-email {
+    width: 30%;
+}
+
+.wp-list-table .column-ip_address {
+    width: 20%;
+}
+
+.wp-list-table .column-created_at {
+    width: 20%;
+}
+
+/* Botão de exportação */
+.page-title-action {
+    margin-left: 10px;
+}
+
+/* Mensagens de sucesso */
+.notice-success {
+    border-left-color: #46b450;
+}
+
+/* Ajustes para telas menores */
+@media screen and (max-width: 782px) {
+    .wp-list-table .column-ip_address,
+    .wp-list-table .column-created_at {
+        display: none;
+    }
+}
