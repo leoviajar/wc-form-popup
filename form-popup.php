@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Form Popup
  * Description: Exibe um popup com coleta de nome/e-mail e exibição de cupom/texto.
- * Version:     1.2
+ * Version:     1.2.1
  * Author:      Leonardo
  */
 
