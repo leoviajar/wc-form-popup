@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
     
     const step2Html = `
         <div class="ppp-step2">
-            <h2>🎉 PARABÉNS 🎉</h2>
+            <h2>CUPOM LIBERADO!</h2>
             <p>Copie o código abaixo para usá-lo na finalização da compra e ganhar 5% de desconto.</p>
             <div class="ppp-coupon-wrapper">
                 <div class="ppp-coupon-code">${couponText}</div>
