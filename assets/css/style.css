@@ -66,8 +66,6 @@
 }
 
 .ppp-popup-image img {
-    width: 100%;
-    max-width: 380px;
     margin-top: 16px;
 }
 
@@ -180,15 +178,6 @@ svg#copy-icon {
 
 svg#copy-icon:hover {
     transform: scale(1.1);
-}
-
-/* Media query para dispositivos móveis */
-@media only screen and (max-width: 768px) {
-    
-    .ppp-popup-image img {
-        max-width: 60%;
-    }
-
 }
 
 @media only screen and (min-width: 400px) and (max-width: 460px) {

@@ -2,19 +2,6 @@
 // Impedir acesso direto
 defined( 'ABSPATH' ) or die;
 
-// Adiciona a página de configurações ao menu do WordPress
-function ppp_add_config_submenu() {
-    add_submenu_page(
-        'popup_promocional',
-        __( 'Configurações', 'form-popup' ),
-        __( 'Configurações', 'form-popup' ),
-        'manage_options',
-        'popup_promocional_configuracoes',
-        'ppp_options_page_html'
-    );
-}
-add_action( 'admin_menu', 'ppp_add_config_submenu' );
-
 // Registra as configurações
 function ppp_settings_init() {
     register_setting( 'ppp_options_group', 'ppp_settings' );
@@ -59,17 +46,41 @@ function ppp_settings_init() {
     );
 
     add_settings_field(
+        'ppp_field_coupon_liberated_title',
+        __( 'Título do Popup (Etapa 2)', 'form-popup' ),
+        'ppp_field_coupon_liberated_title_render',
+        'ppp_options_group',
+        'ppp_settings_section_main'
+    );
+
+    add_settings_field(
+        'ppp_field_coupon_text_description',
+        __( 'Descrição do Cupom (Etapa 2)', 'form-popup' ),
+        'ppp_field_coupon_text_description_render',
+        'ppp_options_group',
+        'ppp_settings_section_main'
+    );
+
+    add_settings_field(
         'ppp_field_coupon_text',
-        __( 'Texto/Cupom (Etapa 2)', 'form-popup' ),
+        __( 'Código do cupom (Etapa 2)', 'form-popup' ),
         'ppp_field_coupon_text_render',
         'ppp_options_group',
         'ppp_settings_section_main'
     );
 
-     add_settings_field(
-        'ppp_field_image_url',
-        __( 'URL da Imagem (Opcional)', 'form-popup' ),
-        'ppp_field_image_url_render',
+    add_settings_field(
+        'ppp_field_image_id',
+        __( 'Imagem do Popup (Opcional)', 'form-popup' ),
+        'ppp_field_image_id_render',
+        'ppp_options_group',
+        'ppp_settings_section_main'
+    );
+
+    add_settings_field(
+        'ppp_field_image_size',
+        __( 'Tamanho da Imagem (Ex: 150x150)', 'form-popup' ),
+        'ppp_field_image_size_render',
         'ppp_options_group',
         'ppp_settings_section_main'
     );
@@ -146,6 +157,13 @@ function ppp_field_popup_desc_render() {
     echo '<textarea name="ppp_settings[popup_desc]" rows="3" class="regular-text">' . esc_textarea( $value ) . '</textarea>';
 }
 
+function ppp_field_coupon_liberated_title_render() {
+    $options = get_option( 'ppp_settings' );
+    $value = isset( $options['coupon_liberated_title'] ) ? sanitize_text_field( $options['coupon_liberated_title'] ) : 'CUPOM LIBERADO!';
+    echo '<input type="text" name="ppp_settings[coupon_liberated_title]" value="' . esc_attr( $value ) . '" class="regular-text">';
+    echo '<p class="description">' . __( 'Título a ser exibido na segunda etapa do popup (ex: CUPOM LIBERADO!).', 'form-popup' ) . '</p>';
+}
+
 function ppp_field_coupon_text_render() {
     $options = get_option( 'ppp_settings' );
     $value = isset( $options['coupon_text'] ) ? sanitize_text_field( $options['coupon_text'] ) : 'CUPOM: MAISVOCE';
@@ -153,14 +171,42 @@ function ppp_field_coupon_text_render() {
     echo '<p class="description">' . __( 'Texto ou código do cupom a ser exibido na segunda etapa.', 'form-popup' ) . '</p>';
 }
 
-function ppp_field_image_url_render() {
+function ppp_field_image_id_render() {
     $options = get_option( 'ppp_settings' );
-    $value = isset( $options['image_url'] ) ? esc_url( $options['image_url'] ) : '';
-    echo '<input type="url" name="ppp_settings[image_url]" value="' . $value . '" class="regular-text">';
-    echo '<p class="description">' . __( 'URL da imagem a ser exibida no popup (opcional). Deixe em branco para não exibir.', 'form-popup' ) . '</p>';
+    $image_id = isset( $options['image_id'] ) ? absint( $options['image_id'] ) : '';
+    $image_url = '';
+    if ( $image_id ) {
+        $image_url = wp_get_attachment_image_url( $image_id, 'full' );
+    }
+
+    echo '<input type="hidden" name="ppp_settings[image_id]" id="ppp_image_id" value="' . esc_attr( $image_id ) . '">';
+    echo '<div id="ppp_image_preview" style="max-width: 200px; max-height: 200px; border: 1px solid #eee; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden;">';
+    echo '<img id="ppp_image_tag" src="' . esc_url( $image_url ) . '" style="max-width: 100%; max-height: 100%; height: auto; display: ' . ( $image_url ? 'block' : 'none' ) . ';">';
+    echo '</div>';
+    echo '<div id="ppp_image_preview" style="display: flex; gap: 10px">';
+    echo '<button type="button" class="button ppp_upload_image_button">' . __( 'Selecionar Imagem', 'form-popup' ) . '</button>';
+    echo '<button type="button" class="button ppp_remove_image_button" style="' . ( $image_id ? '' : 'display:none;' ) . '">' . __( 'Remover Imagem', 'form-popup' ) . '</button>';
+    echo '</div>';
+    echo '<p class="description">' . __( 'Selecione uma imagem da biblioteca de mídia para exibir no popup.', 'form-popup' ) . '</p>';
 }
 
-// Funções para a seção Mautic
+function ppp_field_image_size_render() {
+    $options = get_option( 'ppp_settings' );
+    $image_size_type = isset( $options['image_size_type'] ) ? sanitize_text_field( $options['image_size_type'] ) : 'full';
+    $image_custom_width = isset( $options['image_custom_width'] ) ? absint( $options['image_custom_width'] ) : '';
+
+    echo '<select name="ppp_settings[image_size_type]" id="ppp_image_size_type">';
+    echo '<option value="full" ' . selected( $image_size_type, 'full', false ) . '>' . __( 'Tamanho Completo (Full)', 'form-popup' ) . '</option>';
+    echo '<option value="custom" ' . selected( $image_size_type, 'custom', false ) . '>' . __( 'Personalizado', 'form-popup' ) . '</option>';
+    echo '</select>';
+
+    echo '<div id="ppp_custom_width_field" style="margin-top: 10px;">';
+    echo '<label for="ppp_image_custom_width">' . __( 'Largura Personalizada (px):', 'form-popup' ) . '</label>';
+    echo '<input type="number" name="ppp_settings[image_custom_width]" id="ppp_image_custom_width" value="' . esc_attr( $image_custom_width ) . '" class="small-text">';
+    echo '<p class="description">' . __( 'Insira a largura desejada em pixels para a imagem.', 'form-popup' ) . '</p>';
+    echo '</div>';
+}
+
 function ppp_settings_section_mautic_callback() {
     echo __( 'Configure a integração com o Mautic para captura de leads.', 'form-popup' );
 }
@@ -191,6 +237,13 @@ function ppp_field_mautic_form_name_render() {
     $value = isset( $options['mautic_form_name'] ) ? sanitize_text_field( $options['mautic_form_name'] ) : '';
     echo '<input type="text" name="ppp_settings[mautic_form_name]" value="' . esc_attr( $value ) . '" class="regular-text">';
     echo '<p class="description">' . __( 'Nome do formulário no Mautic.', 'form-popup' ) . '</p>';
+}
+
+function ppp_field_coupon_text_description_render() {
+    $options = get_option( 'ppp_settings' );
+    $value = isset( $options['coupon_text_description'] ) ? sanitize_textarea_field( $options['coupon_text_description'] ) : 'Copie o código abaixo para usá-lo na finalização da compra e ganhar 5% de desconto.';
+    echo '<textarea name="ppp_settings[coupon_text_description]" rows="3" class="regular-text">' . esc_textarea( $value ) . '</textarea>';
+    echo '<p class="description">' . __( 'Texto descritivo a ser exibido na segunda etapa do popup, abaixo do título do cupom.', 'form-popup' ) . '</p>';
 }
 
 // HTML da página de opções

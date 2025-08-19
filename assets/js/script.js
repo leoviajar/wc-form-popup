@@ -85,8 +85,8 @@ jQuery(document).ready(function($) {
     
     const step2Html = `
         <div class="ppp-step2">
-            <h2>CUPOM LIBERADO!</h2>
-            <p>Copie o código abaixo para usá-lo na finalização da compra e ganhar 5% de desconto.</p>
+            <h2>${ppp_ajax_object.settings.coupon_liberated_title || "CUPOM LIBERADO!"}</h2>
+            <p>${ppp_ajax_object.settings.coupon_description || "Copie o código abaixo para usá-lo na finalização da compra e ganhar 5% de desconto."}</p>
             <div class="ppp-coupon-wrapper">
                 <div class="ppp-coupon-code">${couponText}</div>
                     <button id="ppp-copy-button" type="button" class="ppp-copy-icon" aria-label="Copiar código">

@@ -73,14 +73,25 @@ class PPP_Admin {
             return;
         }
         
-        // Adicionar estilos CSS para a página administrativa
         wp_enqueue_style(
             'ppp-admin-style',
             PPP_PLUGIN_URL . 'assets/css/admin.css',
             array(),
             '1.0'
         );
-    }
+
+        // Adicionar scripts JS para a página administrativa
+        wp_enqueue_script(
+            'ppp-admin-script',
+            PPP_PLUGIN_URL . 'assets/js/image-popup.js',
+            array('jquery', 'media-upload', 'wp-mediaelement'),
+            '1.0',
+            true
+        );
+
+        // Necessário para o uploader de mídia do WordPress
+        wp_enqueue_media();
+        }
     
     /**
      * Processa ações administrativas (exportar, excluir)
